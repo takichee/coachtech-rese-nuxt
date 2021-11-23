@@ -1,7 +1,6 @@
 <template>
   <div>
     <Header />
-    <div class="mt-24"></div>
     <Nuxt />
     <Footer />
   </div>
