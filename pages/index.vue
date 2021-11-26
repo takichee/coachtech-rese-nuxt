@@ -11,7 +11,7 @@
             <article class="overflow-hidden rounded-lg shadow-lg">
               <div>
                 <nuxt-link :to="'shops/'+ shop.id">
-                    <img alt="placeholder" class="block h-auto w-full" :src="shop.image_url">
+                    <img :alt="shop.name" class="block h-auto w-full" :src="shop.image_url">
                 </nuxt-link>
               </div>
 

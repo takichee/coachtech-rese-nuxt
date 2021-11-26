@@ -3,12 +3,12 @@
     <header class="z-10 text-gray-700 body-font border-b border-gray-200 fixed top-0 bg-white w-full">
       
       <!-- Header Top -->
-      <div class="hidden flex justify-end pt-2 px-6 text-blue-700">
-        <div class="hover:underline"><p>会員登録</p></div>
-        <span class="px-2">/</span>
-        <div class="hover:underline"><p>ログイン</p></div>
-      </div>
       <div class="flex justify-end pt-2 px-6 text-blue-700">
+        <div class="hover:underline"><nuxt-link to="/auth/register">会員登録</nuxt-link></div>
+        <span class="px-2">/</span>
+        <div class="hover:underline"><nuxt-link to="/auth/login">ログイン</nuxt-link></div>
+      </div>
+      <div class="hidden flex justify-end pt-2 px-6 text-blue-700">
         <div class="hover:underline"><nuxt-link to="/mypage">
           <font-awesome-icon icon="user" class="text-sm"/>
           マイページ
