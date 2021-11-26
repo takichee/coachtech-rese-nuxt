@@ -15,7 +15,7 @@
               <form @submit.prevent="registerUser">
                 <div>
                   <label for="name" class="block text-sm font-medium leading-5 text-gray-700">
-                    表示名
+                    ニックネーム
                   </label>
                   <div class="mt-1 rounded-md shadow-sm">
                     <input v-model="user.name" id="name" type="text" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
@@ -75,23 +75,29 @@
 </template>
 
 <script>
-import axios from 'axios'
+import firebase from '~/plugins/firebase'
+
 export default {
   layout: 'auth',
   data () {
     return {
       user: {
-        name: '',
-        email: '',
-        password: ''
+        name: null,
+        email: null,
+        password: null
       }
     }
   },
   methods: {
     async registerUser() {
       try{
-        await this.$axios.post('http://localhost:8000/api/v1/users', this.user)
-        this.$router.push('/thanks')
+        firebase
+        .auth()
+        .createUserWithEmailAndPassword(this.user.email, this.user.password)
+        .then(async() => {
+          await this.$axios.post('http://localhost:8000/api/v1/users', this.user)
+          this.$router.push('/thanks')
+        })
       } catch (error) {
         console.log(error)
         this.$router.push('/auth/register')
