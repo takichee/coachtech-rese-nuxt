@@ -90,7 +90,7 @@ export default {
   },
   methods: {
     async registerUser() {
-      try{
+      try {
         firebase
         .auth()
         .createUserWithEmailAndPassword(this.user.email, this.user.password)

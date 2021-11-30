@@ -12,5 +12,7 @@ if (!firebase.apps.length) {
         measurementId: "G-ZJ80VCTXK3"
     }
   )
+
+  firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
 }
 export default firebase
