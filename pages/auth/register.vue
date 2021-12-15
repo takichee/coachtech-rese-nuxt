@@ -75,8 +75,6 @@
 </template>
 
 <script>
-import firebase from '~/plugins/firebase'
-
 export default {
   layout: 'auth',
   data () {
@@ -90,36 +88,21 @@ export default {
   },
   methods: {
     async register() {
-      await this.$store.dispatch('auth/register',
-        {
-          email: this.user.email,
-          password: this.user.password
-        }
-      )
-      await this.$axios.post('http://localhost:8000/api/v1/users',
+      try {
+        await this.$store.dispatch('auth/register',
           {
-            name: this.user.name,
             email: this.user.email,
-            password: this.$store.state.auth.userUid
+            password: this.user.password
           }
         )
-      this.$router.push('/thanks')
-    },
-    async registerUser() {
-      try {
-        firebase
-        .auth()
-        .createUserWithEmailAndPassword(this.user.email, this.user.password)
-        .then(() => {
-          this.$axios.post('http://localhost:8000/api/v1/users',
+        await this.$axios.post('http://localhost:8000/api/v1/users',
             {
               name: this.user.name,
               email: this.user.email,
-              password: this.$store.state.auth.userUid
+              uid: this.$store.state.auth.userUid
             }
           )
-          this.$router.push('/thanks')
-        })
+        this.$router.push('/thanks')
       } catch (error) {
         console.log(error)
         this.$router.push('/auth/register')
