@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header />
+    <SearchHeader />
     <div class="mt-24"></div>
     <div class="flex">
     <MypageNav />
@@ -8,6 +8,6 @@
     <div class="min-h-screen"></div>
     <Nuxt />
     </div>
-    <Footer />
+    <ReseFooter />
   </div>
 </template>

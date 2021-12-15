@@ -12,10 +12,10 @@
           <div class="mt-8">
 
             <div class="mt-6">
-              <form @submit.prevent="registerUser">
+              <form @submit.prevent="register">
                 <div>
                   <label for="name" class="block text-sm font-medium leading-5 text-gray-700">
-                    ニックネーム
+                    ユーザー名
                   </label>
                   <div class="mt-1 rounded-md shadow-sm">
                     <input v-model="user.name" id="name" type="text" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
@@ -84,18 +84,40 @@ export default {
       user: {
         name: null,
         email: null,
-        password: null
+        password: null,
       }
     }
   },
   methods: {
+    async register() {
+      await this.$store.dispatch('auth/register',
+        {
+          email: this.user.email,
+          password: this.user.password
+        }
+      )
+      await this.$axios.post('http://localhost:8000/api/v1/users',
+          {
+            name: this.user.name,
+            email: this.user.email,
+            password: this.$store.state.auth.userUid
+          }
+        )
+      this.$router.push('/thanks')
+    },
     async registerUser() {
       try {
         firebase
         .auth()
         .createUserWithEmailAndPassword(this.user.email, this.user.password)
-        .then(async() => {
-          await this.$axios.post('http://localhost:8000/api/v1/users', this.user)
+        .then(() => {
+          this.$axios.post('http://localhost:8000/api/v1/users',
+            {
+              name: this.user.name,
+              email: this.user.email,
+              password: this.$store.state.auth.userUid
+            }
+          )
           this.$router.push('/thanks')
         })
       } catch (error) {

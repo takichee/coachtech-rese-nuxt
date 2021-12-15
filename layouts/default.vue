@@ -1,8 +1,13 @@
 <template>
   <div>
-    <Header />
+    <SearchHeader />
     <div class="mt-24"></div>
     <Nuxt />
-    <Footer />
+    <ReseFooter />
   </div>
 </template>
+
+<script>
+export default {
+}
+</script>

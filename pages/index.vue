@@ -1,56 +1,86 @@
 <template>
   <div>
     <div class="container my-12 mx-auto px-4 md:px-12">
-      <div class="flex flex-wrap -mx-1 lg:-mx-4">
 
-        <!-- Column -->
-        <div v-for="shop in shops" :key="shop.id"
-            class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/4">
-
-            <!-- Article -->
-            <article class="overflow-hidden rounded-lg shadow-lg">
-              <div>
-                <nuxt-link :to="'shops/'+ shop.id">
-                    <img :alt="shop.name" class="block h-auto w-full" :src="shop.image_url">
-                </nuxt-link>
-              </div>
-
-                <header class="flex flex-col items-left justify-between leading-tight p-2 md:p-4">
-                    <h1 class="text-2xl">
-                        <a class="no-underline hover:underline text-black" :href="'shops/'+ shop.id">
-                            {{ shop.name }}
-                        </a>
-                    </h1>
-                    <div class="flex text-sm text-blue-700">
-                        <p>#{{ shop.area }}</p>
-                        <p class="ml-2">#{{ shop.kind}}</p>
-                    </div>
-                </header>
-
-                <footer class="flex items-center justify-between leading-none p-2 md:p-4">
-                    <nuxt-link :to="'shops/'+ shop.id"
-                      class="duration-150 w-1/2 text-center bg-blue-500 text-white p-2 rounded font-semibold text-sm hover:bg-blue-700">
-                        予約する
-                    </nuxt-link>
-                    <a class="no-underline text-grey-darker hover:text-red-dark" href="#">
-                        <span class="hidden">Like</span>
-                        <font-awesome-icon icon="heart" class="text-gray-400 text-3xl" />
+      <!-- Searched shops -->
+      <div v-if="searchedShops !== ''" class="flex flex-wrap -mx-1 lg:-mx-4">
+        <div v-for="(shop, id) in searchedShops" :key="id"
+          class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/4"
+        >
+          <article class="overflow-hidden rounded-lg shadow-lg">
+            <div>
+              <nuxt-link :to="'shops/'+ shop.id">
+                  <img :alt="shop.name" class="block h-auto w-full" :src="shop.image_url">
+              </nuxt-link>
+            </div>
+            <header class="flex flex-col items-left justify-between leading-tight p-2 md:p-4">
+                <h1 class="text-2xl">
+                    <a class="no-underline hover:underline text-black" :href="'shops/'+ shop.id">
+                        {{ shop.name }}
                     </a>
-                </footer>
-
-            </article>
-            <!-- END Article -->
-
+                </h1>
+                <div class="flex text-sm text-blue-700">
+                    <p>#{{ shop.area }}</p>
+                    <p class="ml-2">#{{ shop.kind }}</p>
+                </div>
+            </header>
+            <footer class="flex items-center justify-between leading-none p-2 md:p-4">
+                <nuxt-link :to="'shops/'+ shop.id"
+                  class="duration-150 w-1/2 text-center bg-blue-500 text-white p-2 rounded font-semibold text-sm hover:bg-blue-700">
+                    予約する
+                </nuxt-link>
+                <a class="no-underline text-grey-darker hover:text-red-dark" href="#">
+                    <span class="hidden">Like</span>
+                    <font-awesome-icon icon="heart" class="text-gray-400 text-3xl" />
+                </a>
+            </footer>
+          </article>
         </div>
-        <!-- END Column -->
-
       </div>
+
+      <!-- All shops -->
+      <div v-else class="flex flex-wrap -mx-1 lg:-mx-4">
+        <div v-for="(shop, id) in shops" :key="id"
+          class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/4"
+        >
+          <article class="overflow-hidden rounded-lg shadow-lg">
+            <div>
+              <nuxt-link :to="'shops/'+ shop.id">
+                  <img :alt="shop.name" class="block h-auto w-full" :src="shop.image_url">
+              </nuxt-link>
+            </div>
+            <header class="flex flex-col items-left justify-between leading-tight p-2 md:p-4">
+                <h1 class="text-2xl">
+                    <a class="no-underline hover:underline text-black" :href="'shops/'+ shop.id">
+                        {{ shop.name }}
+                    </a>
+                </h1>
+                <div class="flex text-sm text-blue-700">
+                    <p>#{{ shop.area }}</p>
+                    <p class="ml-2">#{{ shop.kind }}</p>
+                </div>
+            </header>
+            <footer class="flex items-center justify-between leading-none p-2 md:p-4">
+                <nuxt-link :to="'shops/'+ shop.id"
+                  class="duration-150 w-1/2 text-center bg-blue-500 text-white p-2 rounded font-semibold text-sm hover:bg-blue-700">
+                    予約する
+                </nuxt-link>
+                <a class="no-underline text-grey-darker hover:text-red-dark" href="#">
+                    <span class="hidden">Like</span>
+                    <font-awesome-icon icon="heart" class="text-gray-400 text-3xl" />
+                </a>
+            </footer>
+          </article>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 
 export default {
   data () {
@@ -58,18 +88,25 @@ export default {
       shops: []
     }
   },
-  mounted () {
-    axios.get('http://localhost:8000/api/v1/shops')
-    .then((res) =>
-      this.shops = res.data)
-    .catch((error) => {
-      console.log(error)
-      this.shops = "ERROR"
-    })
+  async fetch() {
+    await this.getShops()
+    return
   },
   computed: {
-    user () {
-      return this.$store.getters['user']
+    ...mapGetters({
+      searchedShops: 'filter/getShops'
+    })
+  },
+  methods: {
+    async getShops() {
+      this.shops.splice(0, this.shops.length)
+      const data = axios.get(
+        'http://localhost:8000/api/v1/shops?area=&kind=&keyword='
+      )
+      const result = await data
+      result.data.forEach((shop) => {
+        this.shops.push(shop)
+      })
     }
   }
 }

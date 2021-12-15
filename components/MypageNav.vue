@@ -6,7 +6,7 @@
           <ul>
             <li>
               <nuxt-link to="/mypage" class="text-gray-800 flex items-center my-6 py-2 px-3 hover:text-yellow-400">
-                山田太郎さんのマイページ
+                {{ $store.state.auth.userName }}さんのマイページ
               </nuxt-link>
             </li>
             <li>
@@ -38,3 +38,22 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  created() {
+    this.$store.dispatch('auth/onAuth')
+  },
+  methods: {
+    logout() {
+      console.log('Logout attempt')
+      const result = window.confirm('ログアウトしますか？')
+      if (result) {
+        this.$store.dispatch('auth/logout')
+      } else {
+        console.log('Logout was canceled')
+      }
+    }
+  }
+}
+</script>

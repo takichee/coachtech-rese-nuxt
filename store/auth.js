@@ -2,30 +2,21 @@ import firebase from '~/plugins/firebase.js'
 
 export const state = () => ({
     userUid: '',
-    userName: '',
     userEmail: '',
     loggedIn: false,
 })
 
-export const mutations = {
-    loginStatusChange(state, status) {
-        state.loggedIn = status
-    },
-    setUserUid(state, userUid) {
-        state.userUid = userUid
-    },
-    setUserName(state, userName) {
-        state.userName = userName
-    },
-    setUserImage(state, userImage) {
-        state.userImage = userImage
-    },
-    setUserEmail(state, userEmail) {
-        state.userEmail = userEmail
-    }
-}
-
 export const actions = {
+    async register({ commit }, { email, password }) {
+        const { user } = await firebase
+            .auth()
+            .createUserWithEmailAndPassword(email, password)
+            commit('loginStatusChange', true)
+            console.log('Regist a user was successful')
+            commit('setUserUid', user.uid)
+            commit('setUserEmail', user.email)
+    },
+
     login({ commit }, payload) {
         firebase
             .auth()
@@ -48,7 +39,6 @@ export const actions = {
         firebase.auth().onAuthStateChanged(user => {
             user = user ? user : {}
             commit('setUserUid', user.uid)
-            commit('setUserName', user.displayName)
             commit('setUserEmail', user.email)
             commit('loginStatusChange', user.uid ? true : false)
         })
@@ -68,18 +58,23 @@ export const actions = {
     }
 }
 
+export const mutations = {
+    loginStatusChange(state, status) {
+        state.loggedIn = status
+    },
+    setUserUid(state, userUid) {
+        state.userUid = userUid
+    },
+    setUserEmail(state, userEmail) {
+        state.userEmail = userEmail
+    }
+}
+
 export const getters = {
     getUserUid(state) {
         return state.userUid
-    },
-    getUserName(state) {
-        return state.userName
-    },
-    getUserImage(state) {
-        return state.userImage
     },
     getUserEmail(state) {
         return state.userEmail
     }
 }
-

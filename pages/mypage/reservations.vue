@@ -14,8 +14,8 @@
             <div class="reservation-card__left w-3/4 flex flex-col justify-between py-3 ml-3">
               <h2 class="text-2xl font-medium mb-2">{{ reservation.name }}</h2>
               <div class="flex mb-2 text-xl">
-                <p class="pr-3">{{ reservation.date }}</p>
-                <p class="pr-4">{{ reservation.time }}~</p>
+                <p class="pr-3" v-text="$dayjs(reservation.start_at).locale('ja').format('YYYY年M月D日')" />
+                <p class="pr-3" v-text="$dayjs(reservation.start_at).locale('ja').format('h:mm')+'~'" />
                 <p>{{ reservation.number }}名様</p>
               </div>
               <div class="reservation-card__right flex justify-end px-6 items-center">
@@ -42,13 +42,13 @@ export default {
     }
   },
   mounted () {
-    axios.get('http://localhost:8000/api/v1/reservations/8')
+    axios.get('http://localhost:8000/api/v1/reservations/10')
     .then((res) =>
       this.reservations = res.data)
     .catch((error) => {
       console.log(error)
       this.reservations = "ERROR"
     })
-  },
+  }
 }
 </script>

@@ -25,13 +25,13 @@
         </nuxt-link>
 
         <!-- Search Bar -->
-        <form class="flex items-centers justify-center">
+        <form @submit.prevent class="flex items-centers justify-center">
           <div class="font-sans text-black bg-white flex items-center justify-center">
             <div class="border rounded overflow-hidden flex">
-              <input type="text" class="w-1/4 px-4 py-1 border-r-2" placeholder="エリア">
-              <input type="text" class="w-1/4 px-4 py-1 border-r-2" placeholder="ジャンル">
-              <input type="text" class="w-1/2 px-4 py-1" placeholder="店名">
-              <button class="flex items-center justify-center px-4 border-l bg-yellow-400">
+              <input v-model="area" type="text" class="w-1/4 px-4 py-1 border-r-2" placeholder="エリア">
+              <input v-model="kind" type="text" class="w-1/4 px-4 py-1 border-r-2" placeholder="ジャンル">
+              <input v-model="keyword" type="text" class="w-1/2 px-4 py-1" placeholder="店名">
+              <button @click="createFilter" type="submit" class="flex items-center justify-center px-4 border-l bg-yellow-400">
                 <font-awesome-icon icon="search" class="text-xl text-white" />
               </button>
             </div>
@@ -44,18 +44,31 @@
 
 <script>
 export default {
+  data() {
+    return {
+      area: '',
+      kind: '',
+      keyword: ''
+    }
+  },
   created() {
     this.$store.dispatch('auth/onAuth')
   },
   methods: {
     logout() {
-      console.log('Logout attempt')
       const result = window.confirm('ログアウトしますか？')
       if (result) {
         this.$store.dispatch('auth/logout')
       } else {
         console.log('Logout was canceled')
       }
+    },
+    createFilter() {
+      this.$store.dispatch('filter/createFilter', {
+        area: this.area,
+        kind: this.kind,
+        keyword: this.keyword
+      })
     }
   }
 }

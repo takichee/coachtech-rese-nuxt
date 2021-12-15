@@ -12,11 +12,10 @@
         お気に入り
       </button>
     </div>
-    
   </div>
 </template>
 <script>
 export default {
-  layout: 'mypage'
+  layout: 'mypage',
 }
 </script>
