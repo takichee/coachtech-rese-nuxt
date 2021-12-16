@@ -55,12 +55,13 @@ export const actions = {
             console.log('error: ' + errorCode)
         })
     },
-    onAuth({ commit }) {
-        firebase.auth().onAuthStateChanged(user => {
+    onAuth({ commit, dispatch }) {
+        firebase.auth().onAuthStateChanged(async user => {
             user = user ? user : {}
             commit('setUserUid', user.uid)
             commit('setUserEmail', user.email)
             commit('loginStatusChange', user.uid ? true : false)
+            await dispatch('getUserInfo', user.uid)
         })
     },
     logout({ commit }) {

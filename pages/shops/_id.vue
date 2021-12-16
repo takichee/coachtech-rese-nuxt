@@ -29,11 +29,11 @@
             <header class="bg-yellow-400 rounded-t-lg">
               <h1 class="text-white text-center py-3">ご予約</h1>
             </header>
-            <form class="w-full bg-white flex flex-col py-5 px-8 rounded-lg shadow-lg" action="">
+            <form @submit.prevent class="w-full bg-white flex flex-col py-5 px-8 rounded-lg shadow-lg" action="">
               <label class="text-gray-700 font-bold py-2" for="date">日付</label>
-              <input id="date" class="text-gray-700 shadow border rounded border-gray-300 focus:outline-none focus:shadow-outline py-1 px-3 mb-3" type="date">
+              <input v-model="date" id="date" class="text-gray-700 shadow border rounded border-gray-300 focus:outline-none focus:shadow-outline py-1 px-3 mb-3" type="date">
               <label class="text-gray-700 font-bold py-2" for="time">時間</label>
-              <select id="time" class="text-gray-700 shadow border rounded border-gray-300 mb-3 py-1 px-3 focus:outline-none focus:shadow-outline">
+              <select v-model="time" id="time" class="text-gray-700 shadow border rounded border-gray-300 mb-3 py-1 px-3 focus:outline-none focus:shadow-outline">
                 <option value="18:00">18:00</option>
                 <option value="18:30">18:30</option>
                 <option value="19:00">19:00</option>
@@ -42,7 +42,7 @@
                 <option value="20:30">20:30</option>
               </select>
               <label class="text-gray-700 font-bold py-2" for="number">人数</label>
-              <select class="text-gray-700 shadow border rounded border-gray-300 mb-3 py-1 px-3 focus:outline-none focus:shadow-outline">
+              <select v-model="number" class="text-gray-700 shadow border rounded border-gray-300 mb-3 py-1 px-3 focus:outline-none focus:shadow-outline">
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -55,7 +55,10 @@
                 <option value="10">10</option>
               </select>
               <div class="flex align-center m-auto items-center my-4">
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold rounded py-2 px-4">
+                <button
+                  @click="makeReservation"
+                  type="submit"
+                  class="bg-blue-500 hover:bg-blue-700 text-white font-bold rounded py-2 px-4">
                   予約する
                 </button>
               </div>
@@ -69,11 +72,32 @@
 
 <script>
 export default {
+  data () {
+    return {
+      date: '',
+      time: '',
+      number: ''
+    }
+  },
   async asyncData ({ $axios, params }) {
-    const shop_id = `${params.id}`
+    const shop_id = params.id
     const shop = await $axios.$get(`http://localhost:8000/api/v1/shops/${shop_id}`)
-
-    return { shop_id, shop }
+    return { shop }
+  },
+  methods: {
+    makeReservation () {
+      const startAt = this.date + ' ' + this.time
+      const shopId = this.$route.params.id
+      this.$axios.post('http://localhost:8000/api/v1/reservations',
+            {
+              start_at: startAt,
+              number: this.number,
+              user_id: this.$store.state.auth.userId,
+              shop_id: shopId
+            }
+      )
+      this.$router.push('/done')
+    }
   }
 }
 </script>

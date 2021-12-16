@@ -19,7 +19,7 @@
                 <p>{{ reservation.number }}名様</p>
               </div>
               <div class="reservation-card__right flex justify-end px-6 items-center">
-                <button v-if="!reservation.canceled" class="text-blue-700 underline">キャンセル</button>
+                <button @click="cancelReservation" v-if="!reservation.canceled" class="text-blue-700 underline">キャンセル</button>
                 <p v-else-if="reservation.canceled" class="text-gray-500">キャンセル済み</p>
                 <button class="bg-blue-500 text-white py-1 px-6 ml-3 font-semibold rounded-lg">もう一度予約</button>
               </div>
@@ -42,13 +42,20 @@ export default {
     }
   },
   mounted () {
-    axios.get('http://localhost:8000/api/v1/reservations/10')
-    .then((res) =>
-      this.reservations = res.data)
+    axios.get('http://localhost:8000/api/v1/reservations/' + this.$store.state.auth.userId)
+      .then((res) => {
+        const data = res.data
+        this.reservations.push(...data)
+      }
+    )
     .catch((error) => {
       console.log(error)
       this.reservations = "ERROR"
     })
+  },
+  methods: {
+    cancelReservation() {
+    }
   }
 }
 </script>

@@ -27,7 +27,7 @@
             <footer class="flex items-center justify-between leading-none p-2 md:p-4">
                 <nuxt-link :to="'shops/'+ shop.id"
                   class="duration-150 w-1/2 text-center bg-blue-500 text-white p-2 rounded font-semibold text-sm hover:bg-blue-700">
-                    予約する
+                    詳細を見る
                 </nuxt-link>
                 <a class="no-underline text-grey-darker hover:text-red-dark" href="#">
                     <span class="hidden">Like</span>
