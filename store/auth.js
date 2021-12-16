@@ -1,10 +1,31 @@
 import firebase from '~/plugins/firebase.js'
+import axios from 'axios'
 
 export const state = () => ({
+    userId: '',
+    userName: '',
     userUid: '',
     userEmail: '',
     loggedIn: false,
 })
+
+export const mutations = {
+    loginStatusChange(state, status) {
+        state.loggedIn = status
+    },
+    setUserUid(state, userUid) {
+        state.userUid = userUid
+    },
+    setUserEmail(state, userEmail) {
+        state.userEmail = userEmail
+    },
+    setUserId(state, userId) {
+        state.userId = userId
+    },
+    setUserName(state, userName) {
+        state.userName = userName
+    }
+}
 
 export const actions = {
     async register({ commit }, { email, password }) {
@@ -16,25 +37,24 @@ export const actions = {
             commit('setUserUid', user.uid)
             commit('setUserEmail', user.email)
     },
-
-    login({ commit }, payload) {
+    login({ commit, dispatch }, payload) {
         firebase
             .auth()
             .signInWithEmailAndPassword(payload.email, payload.password)
-        .then((result) => {
+        .then(async (result) => {
             const user = result.user
             commit('loginStatusChange', true)
             console.log('Login was successful')
             commit('setUserUid', user.uid)
             commit('setUserEmail', user.email)
-            this.$router.push('/')
+            await dispatch('getUserInfo', user.uid)
+            await this.$router.push('/')
         })
         .catch((error) => {
             const errorCode = error.code
             console.log('error: ' + errorCode)
         })
     },
-
     onAuth({ commit }) {
         firebase.auth().onAuthStateChanged(user => {
             user = user ? user : {}
@@ -43,7 +63,6 @@ export const actions = {
             commit('loginStatusChange', user.uid ? true : false)
         })
     },
-
     logout({ commit }) {
         firebase.auth().signOut()
         .then(() => {
@@ -55,18 +74,14 @@ export const actions = {
             const errorCode = error.code
             console.log('error: ' + errorCode)
         })
-    }
-}
-
-export const mutations = {
-    loginStatusChange(state, status) {
-        state.loggedIn = status
     },
-    setUserUid(state, userUid) {
-        state.userUid = userUid
-    },
-    setUserEmail(state, userEmail) {
-        state.userEmail = userEmail
+    async getUserInfo({commit}, uid) {
+        const data = await axios.get(
+            'http://localhost:8000/api/v1/users/'
+            + uid
+        )
+        commit('setUserId', data.data.id)
+        commit('setUserName', data.data.name)
     }
 }
 

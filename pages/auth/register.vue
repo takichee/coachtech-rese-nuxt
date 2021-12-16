@@ -75,6 +75,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   layout: 'auth',
   data () {
@@ -83,8 +85,13 @@ export default {
         name: null,
         email: null,
         password: null,
-      }
+      },
     }
+  },
+  computed: {
+    ...mapGetters({
+      uid: 'auth/getUserUid'
+    })
   },
   methods: {
     async register() {
@@ -102,6 +109,9 @@ export default {
               uid: this.$store.state.auth.userUid
             }
           )
+        const data = await this.$axios.get(`http://localhost:8000/api/v1/users/${this.$store.state.auth.userUid}`)
+        this.userInfo = data.data
+        /*await this.$store.dispatch('user/setUserInfo', userInfo)*/
         this.$router.push('/thanks')
       } catch (error) {
         console.log(error)

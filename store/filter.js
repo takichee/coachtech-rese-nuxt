@@ -20,7 +20,7 @@ export const mutations = {
     setKeyword(state, keyword) {
         state.keyword = keyword
     },
-    async searchShops(state, shops) {
+    searchShops(state, shops) {
         state.searchedShops.push(...shops)
     }
 }
@@ -35,7 +35,7 @@ export const actions = {
         dispatch('fetchShops', { area, kind, keyword })
     },
     async fetchShops({commit}, { area, kind, keyword }) {
-        const data = axios.get(
+        const data = await axios.get(
             'http://localhost:8000/api/v1/shops?area='
             + area
             + '&kind='
@@ -43,12 +43,7 @@ export const actions = {
             + '&keyword='
             + keyword
         )
-        const result = await data
-        console.log('area is ' + area)
-        console.log('kind is ' + kind)
-        console.log('keyword is ' + keyword)
-        console.log('result is ' + result.data)
-        commit('searchShops', result.data)
+        commit('searchShops', data.data)
     }
 }
 

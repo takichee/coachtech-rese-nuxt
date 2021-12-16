@@ -41,9 +41,6 @@
 
 <script>
 export default {
-  created() {
-    this.$store.dispatch('auth/onAuth')
-  },
   methods: {
     logout() {
       console.log('Logout attempt')
