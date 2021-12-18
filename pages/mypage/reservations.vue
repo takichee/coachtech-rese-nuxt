@@ -1,12 +1,16 @@
 <template>
   <div class="m-8 w-3/4">
     <h1 class="text-gray-800 font-bold text-3xl mx-8">ご予約履歴</h1>
-    <p class="hidden">ご予約履歴がありません。</p>
     <div class="my-4 px-4 md:px-12">
       <div class="flex flex-wrap -mx-1 lg:-mx-4">
 
+      <div v-if="reservations == ''">
+        <p class="mt-6 mb-4 text-lg">ご予約履歴がありません。</p>
+        <nuxt-link to="/" class="text-blue-700 underline mt-6 text-lg">店舗一覧へ</nuxt-link>
+      </div>
+
       <!-- Column -->
-       <div class="reservation-card w-full my-6" v-for="reservation in reservations" :key="reservation.id">
+      <div v-else class="reservation-card w-full my-6" v-for="reservation in reservations" :key="reservation.id">
           <div class="flex shadow rounded-lg">
             <div class="reservation-card__left w-1/4">
               <img class="h-36 rounded-l-lg" :src="reservation.image_url" alt="">
@@ -19,14 +23,13 @@
                 <p>{{ reservation.number }}名様</p>
               </div>
               <div class="reservation-card__right flex justify-end px-6 items-center">
-                <button @click="cancelReservation" v-if="!reservation.canceled" class="text-blue-700 underline">キャンセル</button>
+                <button @click="cancelReservation(reservation.id)" v-if="!reservation.canceled" class="text-blue-700 underline">キャンセル</button>
                 <p v-else-if="reservation.canceled" class="text-gray-500">キャンセル済み</p>
-                <button class="bg-blue-500 text-white py-1 px-6 ml-3 font-semibold rounded-lg">もう一度予約</button>
+                <nuxt-link :to="`/shops/${reservation.shop_id}`" class="bg-blue-500 text-white py-1 px-6 ml-3 font-semibold rounded-lg">もう一度予約</nuxt-link>
               </div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
@@ -42,7 +45,8 @@ export default {
     }
   },
   mounted () {
-    axios.get('http://localhost:8000/api/v1/reservations/' + this.$store.state.auth.userId)
+    const userId = this.$store.state.auth.userId
+    axios.get('http://localhost:8000/api/v1/reservations/' + userId)
       .then((res) => {
         const data = res.data
         this.reservations.push(...data)
@@ -54,7 +58,13 @@ export default {
     })
   },
   methods: {
-    cancelReservation() {
+    async cancelReservation(reservationId) {
+      const reservation_id = reservationId
+      console.log('Reservation id is ' + reservation_id)
+      await axios.put('http://localhost:8000/api/v1/reservations/' + reservation_id, {
+        canceled: true
+      })
+      window.location.reload()
     }
   }
 }
