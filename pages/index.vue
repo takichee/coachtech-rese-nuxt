@@ -16,7 +16,7 @@
             <header class="flex flex-col items-left justify-between leading-tight p-2 md:p-4">
                 <h1 class="text-2xl">
                   <a class="no-underline hover:underline text-black" :href="'shops/'+ shop.id">
-                      {{ shop.name }} All shops
+                      {{ shop.name }} Searched Shops
                   </a>
                 </h1>
                 <div class="flex text-sm text-blue-700">
@@ -62,7 +62,7 @@
             <header class="flex flex-col items-left justify-between leading-tight p-2 md:p-4">
                 <h1 class="text-2xl">
                     <a class="no-underline hover:underline text-black" :href="'shops/'+ shop.id">
-                        {{ shop.name }} SearchedShops
+                        {{ shop.name }} All Shops
                     </a>
                 </h1>
                 <div class="flex text-sm text-blue-700">
@@ -105,46 +105,28 @@ import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      shops: [],
-      likedShops: [],
-      likedShopIds: []
     }
   },
-  async fetch() {
-    await this.getShops()
+  async mounted() {
+    await this.$store.dispatch('shop/getShops')
+    await this.$store.dispatch('likes/getLikes')
     return
   },
   computed: {
     ...mapGetters({
+      shops: 'shop/getShops'
+    }),
+    ...mapGetters({
       searchedShops: 'filter/getShops'
+    }),
+    ...mapGetters({
+      likedShopIds: 'likes/getLikedShopIds'
     })
   },
   methods: {
-    async getShops() {
-      this.shops.splice(0, this.shops.length)
-      const data = axios.get(
-        'http://localhost:8000/api/v1/shops?area=&kind=&keyword='
-      )
-      const result = await data
-      result.data.forEach((shop) => {
-        this.shops.push(shop)
-      })
-      await this.getLikes()
-    },
-    async getLikes() {
-      const userId = this.$store.state.auth.userId
-      console.log('userId is ' + userId)
-      console.log('this.$store.state.auth.userId is ' + this.$store.state.auth.userId)
-      const data = await axios.get(
-        'http://localhost:8000/api/v1/likes/2'
-        + userId
-      )
-      const result = data
-      result.data.forEach((likedShop) => {
-        this.likedShops.push(likedShop)
-      })
-      this.likedShopIds = this.likedShops.map(obj => obj.shop_id)
-      console.log('likedShopIds:' + this.likedShopIds)
+    getShops() {
+      this.$store.dispatch('shop/getShops')
+      this.$store.dispatch('likes/getLikes')
     },
     addLike(shopId) {
       axios.post('http://localhost:8000/api/v1/likes', {

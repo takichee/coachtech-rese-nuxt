@@ -57,6 +57,7 @@ export const actions = {
     },
     onAuth({ commit, dispatch }) {
         firebase.auth().onAuthStateChanged(async user => {
+            console.log('onAuth is dispatched')
             user = user ? user : {}
             commit('setUserUid', user.uid)
             commit('setUserEmail', user.email)

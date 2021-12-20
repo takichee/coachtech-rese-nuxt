@@ -51,8 +51,8 @@ export default {
       keyword: ''
     }
   },
-  created() {
-    this.$store.dispatch('auth/onAuth')
+  async created() {
+    await this.$store.dispatch('auth/onAuth')
   },
   methods: {
     logout() {

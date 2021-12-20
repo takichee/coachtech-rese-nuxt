@@ -47,6 +47,10 @@ export default {
     'nuxt-fontawesome'
   ],
 
+  env: {
+    baseUrl: process.env.BASE_URL || 'http://localhost:8000/api/v1'
+  },
+
   fontawesome: {
     imports: [
       {

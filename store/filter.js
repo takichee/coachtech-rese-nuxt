@@ -36,13 +36,15 @@ export const actions = {
     },
     async fetchShops({commit}, { area, kind, keyword }) {
         const data = await axios.get(
-            'http://localhost:8000/api/v1/shops?area='
+            process.env.baseUrl + '/shops?area='
             + area
             + '&kind='
             + kind
             + '&keyword='
             + keyword
         )
+        console.log('SearchedShops: ' + data)
+        console.log('SearchedShops: ' + data.data)
         commit('searchShops', data.data)
     }
 }
