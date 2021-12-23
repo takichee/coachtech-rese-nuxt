@@ -37,7 +37,7 @@ export const actions = {
             commit('setUserUid', user.uid)
             commit('setUserEmail', user.email)
     },
-    login({ commit, dispatch }, payload) {
+    async login({ commit, dispatch }, payload) {
         firebase
             .auth()
             .signInWithEmailAndPassword(payload.email, payload.password)
@@ -56,14 +56,16 @@ export const actions = {
         })
     },
     onAuth({ commit, dispatch }) {
-        firebase.auth().onAuthStateChanged(async user => {
-            console.log('onAuth is dispatched')
-            user = user ? user : {}
-            commit('setUserUid', user.uid)
-            commit('setUserEmail', user.email)
-            commit('loginStatusChange', user.uid ? true : false)
-            await dispatch('getUserInfo', user.uid)
-        })
+        return new Promise((resolve) => {
+            firebase.auth().onAuthStateChanged(async (user) => {
+                user = user ? user : {};
+                commit("setUserUid", user.uid);
+                commit("setUserEmail", user.email);
+                commit("loginStatusChange", user.uid ? true : false);
+                await dispatch("getUserInfo", user.uid);
+                resolve();
+            });
+        });
     },
     logout({ commit }) {
         firebase.auth().signOut()
@@ -93,5 +95,8 @@ export const getters = {
     },
     getUserEmail(state) {
         return state.userEmail
+    },
+    isAuthenticated(state) {
+        return state.loggedIn != false
     }
 }

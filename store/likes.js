@@ -12,15 +12,21 @@ export const mutations = {
         state.likedShops.push(...shops)
     },
     setLikedShopIds(state) {
-
         state.likedShopIds = state.likedShops.map(obj => obj.shop_id)
         console.log('likedShopIds: ' + state.likedShopIds)
-    }
+    },
+    resetLikedShops(state) {
+        state.likedShops.splice(0, state.likedShops.length)
+    },
+    resetLikedShopIds(state) {
+        state.likedShopIds.splice(0, state.likedShopIds.length)
+    },
 }
 
 export const actions = {
     async getLikes({ rootState, commit }) {
-        console.log('getLikes is dispatched.')
+        await commit('resetLikedShops')
+        await commit('resetLikedShopIds')
         const userUid = await rootState.auth.userUid
         const user = await axios.get(
             `${process.env.baseUrl}/users/${userUid}`

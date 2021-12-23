@@ -30,18 +30,11 @@
                     詳細を見る
                 </nuxt-link>
                 <button
-                  v-if="likedShopIds.includes(shop.id)"
-                  @click="addLike(shop.id)"
+                  @click="changeLike(shop.id)"
                   type="submit">
                     <span class="hidden">Like</span>
-                    <font-awesome-icon icon="heart" class="text-red-400 text-3xl" />
-                </button>
-                <button
-                  v-else
-                  @click="deleteLike(shop.id)"
-                  type="submit">
-                    <span class="hidden">Like</span>
-                    <font-awesome-icon icon="heart" class="text-gray-400 text-3xl" />
+                    <font-awesome-icon icon="heart"
+                      :class='[likedShopIds.includes(shop.id) ? "text-red-400 text-3xl" : "text-gray-400 text-3xl"]' />
                 </button>
             </footer>
           </article>
@@ -76,18 +69,11 @@
                     詳細を見る
                 </nuxt-link>
                 <button
-                  v-if="likedShopIds.includes(shop.id)"
-                  @click="addLike(shop.id)"
+                  @click="changeLike(shop.id)"
                   type="submit">
                     <span class="hidden">Like</span>
-                    <font-awesome-icon icon="heart" class="text-red-400 text-3xl" />
-                </button>
-                <button
-                  v-else
-                  @click="deleteLike(shop.id)"
-                  type="submit">
-                    <span class="hidden">Like</span>
-                    <font-awesome-icon icon="heart" class="text-gray-400 text-3xl" />
+                    <font-awesome-icon icon="heart"
+                      :class='[likedShopIds.includes(shop.id) ? "text-red-400 text-3xl" : "text-gray-400 text-3xl"]' />
                 </button>
             </footer>
           </article>
@@ -124,19 +110,12 @@ export default {
     })
   },
   methods: {
-    getShops() {
-      this.$store.dispatch('shop/getShops')
-      this.$store.dispatch('likes/getLikes')
-    },
-    addLike(shopId) {
-      axios.post('http://localhost:8000/api/v1/likes', {
+    async changeLike(shopId) {
+      await axios.post('http://localhost:8000/api/v1/likes', {
         user_id: this.$store.state.auth.userId,
         shop_id: shopId
       })
-    },
-    deleteLike(shopId) {
-      axios.delete('http://localhost:8000/api/v1/likes', {
-      })
+      this.$store.dispatch('likes/getLikes')
     }
   }
 }
