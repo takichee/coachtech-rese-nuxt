@@ -43,8 +43,6 @@ export const actions = {
             + '&keyword='
             + keyword
         )
-        console.log('SearchedShops: ' + data)
-        console.log('SearchedShops: ' + data.data)
         commit('searchShops', data.data)
     }
 }

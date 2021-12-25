@@ -82,7 +82,8 @@ export const actions = {
     async getUserInfo({commit}, uid) {
         const data = await axios.get(
             'http://localhost:8000/api/v1/users/'
-            + uid
+            + "gTAiw17sJNSJ9TyCMk01kTkRiFy1"
+            //+ uid
         )
         commit('setUserId', data.data.id)
         commit('setUserName', data.data.name)

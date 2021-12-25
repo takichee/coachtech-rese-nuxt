@@ -13,7 +13,6 @@ export const mutations = {
     },
     setLikedShopIds(state) {
         state.likedShopIds = state.likedShops.map(obj => obj.shop_id)
-        console.log('likedShopIds: ' + state.likedShopIds)
     },
     resetLikedShops(state) {
         state.likedShops.splice(0, state.likedShops.length)

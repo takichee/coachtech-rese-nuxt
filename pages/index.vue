@@ -93,10 +93,15 @@ export default {
     return {
     }
   },
-  async mounted() {
-    await this.$store.dispatch('shop/getShops')
-    await this.$store.dispatch('likes/getLikes')
-    return
+  async created() {
+    if (this.$store.state.auth.loggedIn) {
+      await this.$store.dispatch('shop/getShops')
+      await this.$store.dispatch('likes/getLikes')
+      return
+    } else {
+      await this.$store.dispatch('shop/getShops')
+      return
+    }
   },
   computed: {
     ...mapGetters({

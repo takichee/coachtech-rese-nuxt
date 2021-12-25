@@ -60,7 +60,6 @@ export default {
   methods: {
     async cancelReservation(reservationId) {
       const reservation_id = reservationId
-      console.log('Reservation id is ' + reservation_id)
       await axios.put('http://localhost:8000/api/v1/reservations/' + reservation_id, {
         canceled: true
       })

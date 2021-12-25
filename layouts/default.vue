@@ -2,6 +2,7 @@
   <div>
     <SearchHeader />
     <div class="mt-24"></div>
+    <AskSignUp />
     <Nuxt />
     <ReseFooter />
   </div>
