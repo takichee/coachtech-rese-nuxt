@@ -61,7 +61,6 @@ export default {
       }
     },
     createFilter() {
-
       this.$store.dispatch('filter/createFilter', {
         area: this.area,
         kind: this.kind,

@@ -3,15 +3,17 @@
     <AskSignUp />
 
     <div class="container my-12 mx-auto px-4 md:px-12">
-
-      <div v-if="searchedShops == ''">
+      
+      <div class="text-sm text-gray-700">
+        <div v-if="searchedShops == ''">
         <div v-show="this.$store.state.filter.area != '' || this.$store.state.filter.kind != '' || this.$store.state.filter.keyword != ''">
           <p>検索結果：条件に合うレストランが見つかりませんでした。</p>
         </div>
-      </div>
-      <div v-else>
-        <div v-show="this.$store.state.filter.area != '' || this.$store.state.filter.kind != '' || this.$store.state.filter.keyword != ''">
-          <p>検索結果：{{searchedShops.length}} 件のレストランが見つかりました。</p>
+        </div>
+        <div v-else>
+          <div v-show="this.$store.state.filter.area != '' || this.$store.state.filter.kind != '' || this.$store.state.filter.keyword != ''">
+            <p>検索結果：{{searchedShops.length}} 件のレストランが見つかりました。</p>
+          </div>
         </div>
       </div>
 
@@ -31,7 +33,7 @@
                     <header class="flex flex-col items-left justify-between leading-tight p-2 md:p-4">
                         <h1 class="text-2xl">
                             <a class="no-underline hover:underline text-black" :href="'shops/'+ shop.id">
-                                {{ shop.name }} All
+                                {{ shop.name }}
                             </a>
                         </h1>
                         <div class="flex text-sm text-blue-700">
@@ -75,7 +77,7 @@
             <header class="flex flex-col items-left justify-between leading-tight p-2 md:p-4">
                 <h1 class="text-2xl">
                   <a class="no-underline hover:underline text-black" :href="'shops/'+ shop.id">
-                      {{ shop.name }} Searched
+                      {{ shop.name }}
                   </a>
                 </h1>
                 <div class="flex text-sm text-blue-700">
