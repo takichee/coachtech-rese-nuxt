@@ -23,14 +23,21 @@ export const mutations = {
 }
 
 export const actions = {
-    async getLikes({ rootState, commit }) {
-        await commit('resetLikedShops')
+    async getLikes({ rootState, commit, state }, {userId}) {
+        /*await commit('resetLikedShops')
         await commit('resetLikedShopIds')
         const userUid = await rootState.auth.userUid
         const user = await axios.get(
             `${process.env.baseUrl}/users/${userUid}`
         )
         const userId = await user.data.id
+        const result = await axios.get(
+            `${process.env.baseUrl}/likes/${userId}`
+        )
+        await commit('setLikedShops', result.data)
+        await commit('setLikedShopIds')*/
+        await commit('resetLikedShops')
+        await commit('resetLikedShopIds')
         const result = await axios.get(
             `${process.env.baseUrl}/likes/${userId}`
         )

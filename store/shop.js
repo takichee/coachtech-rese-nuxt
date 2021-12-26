@@ -19,7 +19,7 @@ export const actions = {
     async getShops({ commit }) {
         await commit('resetShops')
         const data = await axios.get(
-            process.env.baseUrl + 
+            process.env.baseUrl +
             '/shops'
         )
         commit('fetchShops', data.data)

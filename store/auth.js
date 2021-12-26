@@ -38,52 +38,36 @@ export const actions = {
             commit('setUserEmail', user.email)
     },
     async login({ commit, dispatch }, payload) {
-        firebase
+        const { user } = await firebase
             .auth()
             .signInWithEmailAndPassword(payload.email, payload.password)
-        .then(async (result) => {
-            const user = result.user
-            commit('loginStatusChange', true)
-            console.log('Login was successful')
-            commit('setUserUid', user.uid)
-            commit('setUserEmail', user.email)
-            await dispatch('getUserInfo', user.uid)
-            await this.$router.push('/')
-        })
-        .catch((error) => {
-            const errorCode = error.code
-            console.log('error: ' + errorCode)
-        })
+        commit('loginStatusChange', true)
+        console.log('Login was successful')
+        commit('setUserUid', user.uid)
+        commit('setUserEmail', user.email)
+        await dispatch('getUserInfo', user.uid)
+        await this.$router.back()
     },
-    onAuth({ commit, dispatch }) {
-        return new Promise((resolve) => {
-            firebase.auth().onAuthStateChanged(async (user) => {
-                user = user ? user : {};
-                commit("setUserUid", user.uid);
-                commit("setUserEmail", user.email);
-                commit("loginStatusChange", user.uid ? true : false);
-                await dispatch("getUserInfo", user.uid);
-                resolve();
-            });
-        });
+    async setUserInfo({ commit }, uid ) {
+        const currentUid = await uid
+        await commit("setUserUid", currentUid)
+        commit("loginStatusChange", currentUid ? true : false)
+        const user = await axios.get('http://localhost:8000/api/v1/users/' + uid)
+        commit("setUserEmail", user.data.email)
+        commit('setUserId', user.data.id)
+        commit('setUserName', user.data.name)
     },
-    logout({ commit }) {
-        firebase.auth().signOut()
-        .then(() => {
-            commit('loginStatusChange', false)
-            console.log('Logout was successful')
-            this.$router.push('')
-        })
-        .catch((error) => {
-            const errorCode = error.code
-            console.log('error: ' + errorCode)
-        })
+    async logout({ commit }) {
+        await firebase.auth().signOut()
+        commit('loginStatusChange', false)
+        console.log('Logout was successful')
+        commit('likes/resetLikedShopIds', null, { root: true })
+        this.$router.push('/')
     },
     async getUserInfo({commit}, uid) {
         const data = await axios.get(
             'http://localhost:8000/api/v1/users/'
-            + "gTAiw17sJNSJ9TyCMk01kTkRiFy1"
-            //+ uid
+            + uid
         )
         commit('setUserId', data.data.id)
         commit('setUserName', data.data.name)

@@ -68,6 +68,7 @@
 <script>
 export default {
   layout: 'auth',
+  middleware: 'ifLoggedInJumpToIndex',
   data() {
     return {
       user: {

@@ -51,9 +51,6 @@ export default {
       keyword: ''
     }
   },
-  async created() {
-    await this.$store.dispatch('auth/onAuth')
-  },
   methods: {
     logout() {
       const result = window.confirm('ログアウトしますか？')

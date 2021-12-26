@@ -37,25 +37,30 @@
 
 <script>
 import axios from 'axios'
+import firebase from '~/plugins/firebase'
+
+
 export default {
   layout: 'mypage',
   data () {
     return {
-      reservations: []
+      reservations: [],
+      userUid: ''
     }
   },
-  mounted () {
-    const userId = this.$store.state.auth.userId
-    axios.get('http://localhost:8000/api/v1/reservations/' + userId)
-      .then((res) => {
-        const data = res.data
-        this.reservations.push(...data)
-      }
-    )
-    .catch((error) => {
-      console.log(error)
-      this.reservations = "ERROR"
-    })
+  async fetch () {
+    if (this.$store.state.auth.userId) {
+      const userId = this.$store.state.auth.userId
+      const result = await axios.get('http://localhost:8000/api/v1/reservations/' + userId)
+      this.reservations = result.data
+    } else {
+      firebase.auth().onAuthStateChanged(async (user) => {
+        await this.$store.dispatch('auth/setUserInfo', user.uid)
+        const userId = this.$store.state.auth.userId
+        const result = await axios.get('http://localhost:8000/api/v1/reservations/' + userId)
+        this.reservations = result.data
+      })
+    }
   },
   methods: {
     async cancelReservation(reservationId) {

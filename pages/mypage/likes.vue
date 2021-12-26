@@ -53,13 +53,21 @@
 <script>
 import axios from 'axios'
 import { mapGetters } from 'vuex'
+import firebase from '~/plugins/firebase'
 
 export default {
   layout: 'mypage',
-  async mounted() {
-    await this.$store.dispatch('shop/getShops')
-    await this.$store.dispatch('likes/getLikes')
-    return
+  async fetch() {
+    if (this.$store.state.auth.userId) {
+      let userId = this.$store.state.auth.userId
+      this.$store.dispatch('likes/getLikes', {userId})
+    } else {
+      firebase.auth().onAuthStateChanged(async (user) => {
+        await this.$store.dispatch('auth/setUserInfo', user.uid)
+        let userId = this.$store.state.auth.userId
+        this.$store.dispatch('likes/getLikes', {userId})
+      })
+    }
   },
   computed: {
     ...mapGetters({
@@ -81,7 +89,8 @@ export default {
         user_id: this.$store.state.auth.userId,
         shop_id: shopId
       })
-      this.$store.dispatch('likes/getLikes')
+      let userId = this.$store.state.auth.userId
+      this.$store.dispatch('likes/getLikes', { userId })
     }
   }
 }

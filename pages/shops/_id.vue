@@ -29,40 +29,53 @@
             <header class="bg-yellow-400 rounded-t-lg">
               <h1 class="text-white text-center py-3">ご予約</h1>
             </header>
-            <form @submit.prevent class="w-full bg-white flex flex-col py-5 px-8 rounded-lg shadow-lg" action="">
-              <label class="text-gray-700 font-bold py-2" for="date">日付</label>
-              <input v-model="date" id="date" class="text-gray-700 shadow border rounded border-gray-300 focus:outline-none focus:shadow-outline py-1 px-3 mb-3" type="date">
-              <label class="text-gray-700 font-bold py-2" for="time">時間</label>
-              <select v-model="time" id="time" class="text-gray-700 shadow border rounded border-gray-300 mb-3 py-1 px-3 focus:outline-none focus:shadow-outline">
-                <option value="18:00">18:00</option>
-                <option value="18:30">18:30</option>
-                <option value="19:00">19:00</option>
-                <option value="19:30">19:30</option>
-                <option value="20:00">20:00</option>
-                <option value="20:30">20:30</option>
-              </select>
-              <label class="text-gray-700 font-bold py-2" for="number">人数</label>
-              <select v-model="number" class="text-gray-700 shadow border rounded border-gray-300 mb-3 py-1 px-3 focus:outline-none focus:shadow-outline">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-              </select>
-              <div class="flex align-center m-auto items-center my-4">
-                <button
-                  @click="makeReservation"
-                  type="submit"
-                  class="bg-blue-500 hover:bg-blue-700 text-white font-bold rounded py-2 px-4">
-                  予約する
-                </button>
+            <div class="w-full bg-white py-5 px-8 rounded-lg shadow-lg" >
+              <form v-if="this.$store.state.auth.loggedIn" @submit.prevent class="flex flex-col">
+                <label class="text-gray-700 font-bold py-2" for="date">日付</label>
+                <input v-model="date" id="date" class="text-gray-700 shadow border rounded border-gray-300 focus:outline-none focus:shadow-outline py-1 px-3 mb-3" type="date">
+                <label class="text-gray-700 font-bold py-2" for="time">時間</label>
+                <select v-model="time" id="time" class="text-gray-700 shadow border rounded border-gray-300 mb-3 py-1 px-3 focus:outline-none focus:shadow-outline">
+                  <option value="18:00">18:00</option>
+                  <option value="18:30">18:30</option>
+                  <option value="19:00">19:00</option>
+                  <option value="19:30">19:30</option>
+                  <option value="20:00">20:00</option>
+                  <option value="20:30">20:30</option>
+                </select>
+                <label class="text-gray-700 font-bold py-2" for="number">人数</label>
+                <select v-model="number" class="text-gray-700 shadow border rounded border-gray-300 mb-3 py-1 px-3 focus:outline-none focus:shadow-outline">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+                </select>
+                <div class="flex align-center m-auto items-center my-4">
+                  <button
+                    @click="makeReservation"
+                    type="submit"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold rounded py-2 px-4">
+                    予約する
+                  </button>
+                </div>
+              </form>
+              <div v-else>
+                <p class="flex justify-center">ご予約にはログインが必要です。</p>
+                <div class="flex px-4 py-3 sm:px-6 justify-center">
+                  <nuxt-link to="/auth/register" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-500 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
+                    かんたん登録
+                  </nuxt-link>
+                  <nuxt-link to="/auth/login" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                    ログイン
+                  </nuxt-link>
+                </div>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>
