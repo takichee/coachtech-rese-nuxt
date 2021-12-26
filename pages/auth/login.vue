@@ -31,7 +31,7 @@
               </div>
             </div>
 
-            <div class="mt-6 flex items-center justify-between">
+            <div class="mt-6 flex items-center justify-between hidden">
               <div class="flex items-center">
                 <input id="remember_me" type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" />
                 <label for="remember_me" class="ml-2 block text-sm leading-5 text-gray-900">
@@ -39,7 +39,7 @@
                 </label>
               </div>
 
-              <div class="text-sm leading-5">
+              <div class="text-sm leading-5 hidden">
                 <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">
                   パスワードをお忘れですか？
                 </a>
