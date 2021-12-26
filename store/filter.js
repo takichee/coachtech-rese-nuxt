@@ -4,7 +4,7 @@ export const state = () => ({
     searchedShops: [],
     area: '',
     kind: '',
-    keyword: '',
+    keyword: ''
 })
 
 export const mutations = {

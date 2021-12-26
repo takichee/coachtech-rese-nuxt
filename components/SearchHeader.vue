@@ -61,12 +61,24 @@ export default {
       }
     },
     createFilter() {
+
       this.$store.dispatch('filter/createFilter', {
         area: this.area,
         kind: this.kind,
-        keyword: this.keyword
-      })
+        keyword: this.keyword})
     }
+
+      /*if (this.area == '' && this.kind == '' && this.keyword == '')
+        {
+          this.$store.dispatch('shop/getShops')
+        } else {
+          this.$store.dispatch('filter/createFilter', {
+          area: this.area,
+          kind: this.kind,
+          keyword: this.keyword
+        })
+      }
+    }*/
   }
 }
 </script>
