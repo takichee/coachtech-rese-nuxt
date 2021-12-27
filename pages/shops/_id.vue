@@ -117,7 +117,7 @@ export default {
   },
   async asyncData ({ $axios, params }) {
     const shop_id = params.id
-    const shop = await $axios.$get(`${process.env.baseUrl}shops/${shop_id}`)
+    const shop = await $axios.$get(`${process.env.baseUrl}/shops/${shop_id}`)
     return { shop }
   },
   methods: {
