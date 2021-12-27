@@ -49,7 +49,7 @@ export default {
   ],
 
   env: {
-    baseUrl: process.env.BASE_URL || 'http://localhost:8000/api/v1'
+    baseUrl: process.env.BASE_URL || 'https://secret-reaches-56895.herokuapp.com/api/v1'
   },
 
   fontawesome: {
