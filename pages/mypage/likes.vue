@@ -15,7 +15,7 @@
             class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
             <article class="overflow-hidden rounded-lg shadow-lg">
               <div>
-                <nuxt-link :to="'shops/'+ shop.shop_id">
+                <nuxt-link :to="`/shops/${shop.shop_id}`">
                     <img alt="placeholder" class="block h-auto w-full" :src="shop.image_url">
                 </nuxt-link>
               </div>
@@ -31,7 +31,7 @@
                   </div>
               </header>
               <footer class="flex items-center justify-between leading-none p-2 md:p-4">
-                <nuxt-link :to="'shops/'+ shop.shop_id"
+                <nuxt-link :to="`/shops/${shop.shop_id}`"
                   class="duration-150 w-1/2 text-center bg-blue-500 text-white p-2 rounded font-semibold text-sm hover:bg-blue-700">
                     予約する
                 </nuxt-link>
