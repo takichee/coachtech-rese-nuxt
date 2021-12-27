@@ -30,40 +30,57 @@
               <h1 class="text-white text-center py-3">ご予約</h1>
             </header>
             <div class="w-full bg-white py-5 px-8 rounded-lg shadow-lg" >
-              <form v-if="this.$store.state.auth.loggedIn" @submit.prevent class="flex flex-col">
-                <label class="text-gray-700 font-bold py-2" for="date">日付</label>
-                <input v-model="date" id="date" class="text-gray-700 shadow border rounded border-gray-300 focus:outline-none focus:shadow-outline py-1 px-3 mb-3" type="date">
-                <label class="text-gray-700 font-bold py-2" for="time">時間</label>
-                <select v-model="time" id="time" class="text-gray-700 shadow border rounded border-gray-300 mb-3 py-1 px-3 focus:outline-none focus:shadow-outline">
-                  <option value="18:00">18:00</option>
-                  <option value="18:30">18:30</option>
-                  <option value="19:00">19:00</option>
-                  <option value="19:30">19:30</option>
-                  <option value="20:00">20:00</option>
-                  <option value="20:30">20:30</option>
-                </select>
-                <label class="text-gray-700 font-bold py-2" for="number">人数</label>
-                <select v-model="number" class="text-gray-700 shadow border rounded border-gray-300 mb-3 py-1 px-3 focus:outline-none focus:shadow-outline">
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                  <option value="7">7</option>
-                  <option value="8">8</option>
-                  <option value="9">9</option>
-                  <option value="10">10</option>
-                </select>
-                <div class="flex align-center m-auto items-center my-4">
-                  <button
-                    @click="makeReservation"
-                    type="submit"
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold rounded py-2 px-4">
-                    予約する
-                  </button>
-                </div>
-              </form>
+
+              <div v-if="this.$store.state.auth.loggedIn">
+                <validation-observer ref="obs" v-slot="ObserverProps">
+                  <form @submit.prevent class="flex flex-col">
+                    <validation-provider v-slot="{errors}" rules="required">
+                      <label class="text-gray-700 font-bold py-2" for="日付">日付</label>
+                      <input v-model="date" name="日付" class="w-full text-gray-700 shadow border rounded border-gray-300 focus:outline-none focus:shadow-outline py-1 px-3 mb-3" type="date">
+                      <p class="text-red-600">{{errors[0]}}</p>
+                    </validation-provider>
+                    <validation-provider v-slot="{errors}" rules="required">
+                      <label class="text-gray-700 font-bold py-2" for="開始時間">時間</label>
+                      <select v-model="time" name="開始時間" id="time" class="w-full text-gray-700 shadow border rounded border-gray-300 mb-3 py-1 px-3 focus:outline-none focus:shadow-outline">
+                        <option value="18:00">18:00</option>
+                        <option value="18:30">18:30</option>
+                        <option value="19:00">19:00</option>
+                        <option value="19:30">19:30</option>
+                        <option value="20:00">20:00</option>
+                        <option value="20:30">20:30</option>
+                      </select>
+                      <p class="text-red-600">{{errors[0]}}</p>
+                    </validation-provider>
+                    <validation-provider v-slot="{errors}" rules="required">
+                      <label class="text-gray-700 font-bold py-2" for="人数">人数</label>
+                      <select v-model="number" name="人数" class="w-full text-gray-700 shadow border rounded border-gray-300 mb-3 py-1 px-3 focus:outline-none focus:shadow-outline">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                      </select>
+                      <p class="text-red-600">{{errors[0]}}</p>
+                    </validation-provider>
+                    
+                    <div class="flex align-center m-auto items-center my-4">
+                      <button
+                        @click="makeReservation"
+                        type="submit"
+                        :disabled="ObserverProps.invalid"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold rounded py-2 px-4">
+                        予約する
+                      </button>
+                    </div>
+                  </form>
+                </validation-observer>
+              </div>
+
               <div v-else>
                 <p class="flex justify-center">ご予約にはログインが必要です。</p>
                 <div class="flex px-4 py-3 sm:px-6 justify-center">
@@ -89,7 +106,13 @@ export default {
     return {
       date: '',
       time: '',
-      number: ''
+      number: '',
+      minDate: ''
+    }
+  },
+  computed: {
+    getMinDate() {
+      minDate = new Date();
     }
   },
   async asyncData ({ $axios, params }) {
