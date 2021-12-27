@@ -85,7 +85,7 @@ export default {
   },
   methods: {
     async changeLike(shopId) {
-      await axios.post('http://localhost:8000/api/v1/likes', {
+      await axios.post(`${process.env.baseUrl}/likes`, {
         user_id: this.$store.state.auth.userId,
         shop_id: shopId
       })

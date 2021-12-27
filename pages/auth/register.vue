@@ -121,16 +121,13 @@ export default {
             password: this.user.password
           }
         )
-        await this.$axios.post('http://localhost:8000/api/v1/users',
+        await this.$axios.post(`${process.env.baseUrl}/users`,
             {
               name: this.user.name,
               email: this.user.email,
               uid: this.$store.state.auth.userUid
             }
           )
-        // const data = await this.$axios.get(`http://localhost:8000/api/v1/users/${this.$store.state.auth.userUid}`)
-        // this.userInfo = data.data
-        // await this.$store.dispatch('user/setUserInfo', userInfo)
         this.$router.push('/thanks')
       } catch (error) {
         alert(error)

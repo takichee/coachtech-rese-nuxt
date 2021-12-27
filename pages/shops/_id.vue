@@ -117,14 +117,14 @@ export default {
   },
   async asyncData ({ $axios, params }) {
     const shop_id = params.id
-    const shop = await $axios.$get(`http://localhost:8000/api/v1/shops/${shop_id}`)
+    const shop = await $axios.$get(`${process.env.baseUrl}shops/${shop_id}`)
     return { shop }
   },
   methods: {
     makeReservation () {
       const startAt = this.date + ' ' + this.time
       const shopId = this.$route.params.id
-      this.$axios.post('http://localhost:8000/api/v1/reservations',
+      this.$axios.post(`${process.env.baseUrl}/reservations`,
             {
               start_at: startAt,
               number: this.number,

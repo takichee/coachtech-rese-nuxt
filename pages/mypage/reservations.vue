@@ -51,13 +51,13 @@ export default {
   async fetch () {
     if (this.$store.state.auth.userId) {
       const userId = this.$store.state.auth.userId
-      const result = await axios.get('http://localhost:8000/api/v1/reservations/' + userId)
+      const result = await axios.get(`${process.env.baseUrl}/reservations/${userId}`)
       this.reservations = result.data
     } else {
       firebase.auth().onAuthStateChanged(async (user) => {
         await this.$store.dispatch('auth/setUserInfo', user.uid)
         const userId = this.$store.state.auth.userId
-        const result = await axios.get('http://localhost:8000/api/v1/reservations/' + userId)
+        const result = await axios.get(`${process.env.baseUrl}/reservations/${userId}`)
         this.reservations = result.data
       })
     }
@@ -65,7 +65,7 @@ export default {
   methods: {
     async cancelReservation(reservationId) {
       const reservation_id = reservationId
-      await axios.put('http://localhost:8000/api/v1/reservations/' + reservation_id, {
+      await axios.put(`${process.env.baseUrl}/reservations/${reservation_id}`, {
         canceled: true
       })
       window.location.reload()

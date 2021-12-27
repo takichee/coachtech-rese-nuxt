@@ -52,7 +52,7 @@ export const actions = {
         const currentUid = await uid
         await commit("setUserUid", currentUid)
         commit("loginStatusChange", currentUid ? true : false)
-        const user = await axios.get('http://localhost:8000/api/v1/users/' + uid)
+        const user = await axios.get(`${process.env.baseUrl}/users/${uid}`)
         commit("setUserEmail", user.data.email)
         commit('setUserId', user.data.id)
         commit('setUserName', user.data.name)
@@ -66,8 +66,7 @@ export const actions = {
     },
     async getUserInfo({commit}, uid) {
         const data = await axios.get(
-            'http://localhost:8000/api/v1/users/'
-            + uid
+            `${process.env.baseUrl}/users/${uid}`
         )
         commit('setUserId', data.data.id)
         commit('setUserName', data.data.name)
